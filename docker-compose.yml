@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    networks:
+      - mindfactory_challenge_network 
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./apps/backend/
+      dockerfile: Dockerfile
+    container_name: api
+    env_file:
+      - .env
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    networks:
+      - mindfactory_challenge_network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  client:
+    build:
+      context: ./apps/frontend/
+      dockerfile: Dockerfile
+    container_name: client
+    env_file:
+      - .env
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    networks:
+      - mindfactory_challenge_network 
+    restart: unless-stopped
+
+networks:
+  mindfactory_challenge_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
