@@ -1,5 +1,8 @@
 import { DataSourceOptions } from 'typeorm';
 
+import { config } from 'dotenv';
+if (process.env.NODE_ENV !== 'production') config(); // loads .env variables into process.env
+
 export class DatabaseConfig {
   public getConfig = (): DataSourceOptions => {
     return {
