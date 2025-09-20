@@ -5,22 +5,22 @@ services:
     image: postgres:16
     container_name: postgres
     env_file:
-      - .env
+      - apps/backend/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - mindfactory_challenge_network 
+      - mindfactory_challenge_network
     restart: unless-stopped
 
-  api:
+  backend:
     build:
       context: ./apps/backend/
       dockerfile: Dockerfile
-    container_name: api
+    container_name: backend
     env_file:
-      - .env
+      - apps/backend/.env
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
@@ -29,13 +29,11 @@ services:
     depends_on:
       - postgres
 
-  client:
+  frontend:
     build:
       context: ./apps/frontend/
       dockerfile: Dockerfile
-    container_name: client
-    env_file:
-      - .env
+    container_name: frontend
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     networks:
