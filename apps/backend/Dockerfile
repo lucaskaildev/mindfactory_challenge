@@ -16,4 +16,4 @@ RUN npm run build
 
 EXPOSE ${BACKEND_PORT}
 
-CMD ["node", "dist/main.js"]
+CMD npx typeorm migration:run -d dist/database/datasources/postgresql.datasource.js && node dist/main
