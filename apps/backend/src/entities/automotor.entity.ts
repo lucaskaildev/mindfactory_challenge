@@ -8,18 +8,11 @@ import {
   ValueTransformer,
 } from 'typeorm';
 import { ObjetoDeValor } from '@/entities/objeto-de-valor.entity';
+import { DateToYYYYMM, YYYYMMToDate } from '@/lib/date';
 
 const YYYYMMTransformer: ValueTransformer = {
-  to: (value: Date): number => {
-    const year = value.getFullYear();
-    const month = value.getMonth() + 1;
-    return year * 100 + month;
-  },
-  from: (value: number): Date => {
-    const year = Math.floor(value / 100); // we obtain something like 2025.09 and round it down
-    const month = value % 100; // we obtain the last two digits, something like 9 if value is 202509
-    return new Date(year, month - 1, 1);
-  },
+  to: DateToYYYYMM,
+  from: YYYYMMToDate,
 };
 
 @Entity('Automotores')
