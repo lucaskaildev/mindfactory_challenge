@@ -36,4 +36,14 @@ export class SujetoService {
       updatedAt: sujeto.updatedAt,
     };
   }
+
+  async findByCuit(cuit: string): Promise<SujetoResponseDto | null> {
+    const sujeto = await this.sujetoRepository.findOne({
+      where: { cuit },
+    });
+    if (!sujeto) {
+      return null;
+    }
+    return this.mapToResponseDto(sujeto);
+  }
 }

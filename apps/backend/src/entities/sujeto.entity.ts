@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { VinculoSujetoObjeto } from './vinculo-sujeto-objeto.entity';
+import { VinculoSujetoObjeto } from '@/entities/vinculo-sujeto-objeto.entity';
 
 @Entity('Sujeto')
 export class Sujeto {
