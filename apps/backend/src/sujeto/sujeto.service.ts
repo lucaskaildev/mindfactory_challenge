@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sujeto } from '@/entities/sujeto.entity';
 import { CreateSujetoDto, SujetoResponseDto } from '@/sujeto/dto';
+import { isDuplicateKeyError } from '@/database';
 
 @Injectable()
 export class SujetoService {
@@ -12,21 +13,17 @@ export class SujetoService {
   ) { }
 
   async create(createSujetoDto: CreateSujetoDto): Promise<SujetoResponseDto> {
-    await this.sujetoRepository.upsert(
-      {
+    try {
+      const created = await this.sujetoRepository.save({
         cuit: createSujetoDto.cuit,
         denominacion: createSujetoDto.denominacion,
-      },
-      ['cuit'],
-    );
-
-    const created = await this.sujetoRepository.findOneBy({
-      cuit: createSujetoDto.cuit,
-    });
-
-    if (!created) throw new ConflictException('El CUIT ya existe');
-
-    return this.mapToResponseDto(created);
+      });
+      return this.mapToResponseDto(created);
+    } catch (err) {
+      if (isDuplicateKeyError(err))
+        throw new ConflictException('El CUIT ya está registrado.'); //TODO: create a db error mapper to check if it was unique constraint, this leaks information
+      throw err;
+    }
   }
 
   // easier to edit mappings in one place in case dto changes
