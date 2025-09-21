@@ -8,11 +8,13 @@ import {
 import { IsValidCuit } from '@/validators/decorators/is-valid-cuit.decorator';
 import { IsValidFechaDeFabricacion } from '@/validators/decorators/is-valid-fecha-de-fabricacion.decorator';
 import { IsValidDominio } from '@/validators/decorators/is-valid-dominio.decorator';
+import { Transform } from 'class-transformer';
 
 export class CreateAutomotorDto {
   @IsNotEmpty({ message: 'Dominio es requerido' })
   @IsString({ message: 'Dominio debe ser una cadena de texto' })
   @IsValidDominio({ message: 'Dominio no es válido' })
+  @Transform(({ value }) => String(value).trim().toUpperCase())
   dominio: string;
 
   @IsOptional()

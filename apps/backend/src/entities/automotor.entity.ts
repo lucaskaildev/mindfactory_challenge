@@ -5,15 +5,8 @@ import {
   CreateDateColumn,
   OneToOne,
   JoinColumn,
-  ValueTransformer,
 } from 'typeorm';
 import { ObjetoDeValor } from '@/entities/objeto-de-valor.entity';
-import { DateToYYYYMM, YYYYMMToDate } from '@/lib/date';
-
-const YYYYMMTransformer: ValueTransformer = {
-  to: DateToYYYYMM,
-  from: YYYYMMToDate,
-};
 
 @Entity('Automotores')
 export class Automotor {
@@ -37,10 +30,9 @@ export class Automotor {
 
   @Column({
     name: 'atr_fecha_fabricacion',
-    transformer: YYYYMMTransformer,
     type: 'int',
   })
-  fechaFabricacion: Date;
+  fechaFabricacion: number;
 
   @CreateDateColumn({ name: 'atr_fecha_alta_registro' })
   fechaAltaRegistro: Date;
