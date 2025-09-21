@@ -7,8 +7,8 @@ import {
   JoinColumn,
   Index,
 } from 'typeorm';
-import { ObjetoDeValor } from './objeto-de-valor.entity';
-import { Sujeto } from './sujeto.entity';
+import { ObjetoDeValor } from '@/entities/objeto-de-valor.entity';
+import { Sujeto } from '@/entities/sujeto.entity';
 
 @Entity('Vinculo_Sujeto_Objeto')
 // TODO: create partial unique index for active owner constraint in migration:
@@ -60,4 +60,3 @@ export class VinculoSujetoObjeto {
   @JoinColumn({ name: 'vso_spo_id' })
   sujeto: Sujeto;
 }
-

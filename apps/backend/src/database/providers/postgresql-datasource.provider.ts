@@ -1,4 +1,4 @@
-import postgreSqlDataSource from '../datasources/postgresql.datasource';
+import postgreSqlDataSource from '@/database/datasources/postgresql.datasource';
 import { DataSourceFactory } from '..';
 
 export function getPostgreSqlDatabaseProvider(): DataSourceFactory {

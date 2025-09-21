@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { VinculoSujetoObjeto } from './vinculo-sujeto-objeto.entity';
+import { VinculoSujetoObjeto } from '@/entities/vinculo-sujeto-objeto.entity';
 
 @Entity('Objeto_De_Valor')
 export class ObjetoDeValor {
@@ -31,4 +31,3 @@ export class ObjetoDeValor {
   @OneToMany(() => VinculoSujetoObjeto, (vinculo) => vinculo.objetoValor) // objeto can have multiple vinculo-sujeto-objeto
   vinculos: VinculoSujetoObjeto[];
 }
-

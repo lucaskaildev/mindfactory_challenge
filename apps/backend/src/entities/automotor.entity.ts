@@ -7,7 +7,7 @@ import {
   JoinColumn,
   ValueTransformer,
 } from 'typeorm';
-import { ObjetoDeValor } from './objeto-de-valor.entity';
+import { ObjetoDeValor } from '@/entities/objeto-de-valor.entity';
 
 const YYYYMMTransformer: ValueTransformer = {
   to: (value: Date): number => {
