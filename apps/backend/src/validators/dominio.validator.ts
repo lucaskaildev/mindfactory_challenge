@@ -16,6 +16,6 @@ export class DominioValidator {
    * Normalize input string (uppercase)
    */
   private static normalize(dominio: string): string {
-    return dominio.toUpperCase();
+    return dominio?.toUpperCase();
   }
 }
