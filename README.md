@@ -23,7 +23,21 @@ POSTGRES_DB=mindfactory
 FRONTEND_PORT=4200
 ```
 
-Nota: luego se agregará aquí la información sobre variables de entorno del frontend.
+### 1.1) Configurar frontend (API base URL)
+
+Edita `apps/frontend/src/environments/environment.ts` para que `apiBaseUrl` apunte a tu backend.
+
+Ejemplos:
+
+```ts
+// apps/frontend/src/environments/environment.ts
+export const environment = {
+  // Local (ng serve) con backend en 3000
+  apiBaseUrl: 'http://localhost:3000/api'
+};
+```
+
+Si usás Docker Compose, alinealo con `BACKEND_PORT` definido en `apps/backend/.env` (por defecto 3000). Si cambiaste el puerto, actualiza aquí el valor (p. ej. `http://localhost:5000/api`).
 
 ### 2) (Opcional) Generar migraciones cuando cambies el modelo
 
