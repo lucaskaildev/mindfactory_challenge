@@ -20,6 +20,7 @@ export class AutomotoresListPage implements OnInit {
   automotores: AutomotorListItem[] = [];
   loading = true;
   error: string | null = null;
+  errors: string[] = [];
   dominiosBeingDeleted: Set<string> = new Set<string>();
 
   constructor(private readonly api: ApiService) { }
@@ -31,10 +32,11 @@ export class AutomotoresListPage implements OnInit {
   private fetchAutomotores(): void {
     this.loading = true;
     this.error = null;
+    this.errors = [];
     this.api.getAutomotores().subscribe({
       next: (rows) => {
         this.automotores = rows.map((row) => ({
-          dominio: row.dominio,
+          dominio: (row.dominio || '').toUpperCase(),
           cuitDueno: row.dueno?.cuit ?? null,
           denominacionDueno: row.dueno?.denominacion ?? null,
           fechaFabricacion: row.fechaFabricacion,
@@ -44,6 +46,8 @@ export class AutomotoresListPage implements OnInit {
       error: (err) => {
         const message = err?.error?.message || err?.message || 'Error cargando automotores';
         this.error = Array.isArray(message) ? message.join(', ') : String(message);
+        const serverErrors = err?.error?.errors;
+        this.errors = Array.isArray(serverErrors) ? serverErrors.map((e: { message: string }) => e.message) : [];
         this.loading = false;
       },
     });
@@ -52,18 +56,22 @@ export class AutomotoresListPage implements OnInit {
   onDelete(dominio: string): void {
     const confirmed = window.confirm(`Eliminar automotor ${dominio}?`);
     if (!confirmed) return;
-    if (this.dominiosBeingDeleted.has(dominio)) return;
-    this.dominiosBeingDeleted.add(dominio);
+    const normalized = (dominio || '').toUpperCase();
+    if (this.dominiosBeingDeleted.has(normalized)) return;
+    this.dominiosBeingDeleted.add(normalized);
     this.error = null;
-    this.api.deleteAutomotor(dominio).subscribe({
+    this.errors = [];
+    this.api.deleteAutomotor(normalized).subscribe({
       next: () => {
         this.fetchAutomotores();
-        this.dominiosBeingDeleted.delete(dominio);
+        this.dominiosBeingDeleted.delete(normalized);
       },
       error: (err) => {
         const message = err?.error?.message || err?.message || 'Error eliminando automotor';
         this.error = Array.isArray(message) ? message.join(', ') : String(message);
-        this.dominiosBeingDeleted.delete(dominio);
+        const serverErrors = err?.error?.errors;
+        this.errors = Array.isArray(serverErrors) ? serverErrors.map((e: unknown) => String(e)) : [];
+        this.dominiosBeingDeleted.delete(normalized);
       },
     });
   }

@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <div class="flex flex-col items-center gap-4 mt-8">
+      <a routerLink="/automotores/new" class="px-4 py-2 bg-green-600 text-white rounded">Crear automotor</a>
       <a routerLink="/automotores" class="px-4 py-2 bg-blue-600 text-white rounded">Ver listado</a>
     </div>
   `

@@ -8,7 +8,12 @@
 </ng-container>
 
 <ng-container *ngIf="!loading && error">
-  <div class="mt-6 text-red-700 bg-red-50 border border-red-200 p-3 rounded">{{ error }}</div>
+  <div class="mt-6 text-red-700 bg-red-50 border border-red-200 p-3 rounded">
+    <div>{{ error }}</div>
+    <ul class="list-disc ml-5 mt-1" *ngIf="errors.length">
+      <li *ngFor="let e of errors">{{ e }}</li>
+    </ul>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="!loading && !error && automotores.length; else empty">
