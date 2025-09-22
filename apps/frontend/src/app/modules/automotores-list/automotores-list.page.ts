@@ -20,6 +20,7 @@ export class AutomotoresListPage implements OnInit {
   automotores: AutomotorListItem[] = [];
   loading = true;
   error: string | null = null;
+  dominiosBeingDeleted: Set<string> = new Set<string>();
 
   constructor(private readonly api: ApiService) { }
 
@@ -51,7 +52,20 @@ export class AutomotoresListPage implements OnInit {
   onDelete(dominio: string): void {
     const confirmed = window.confirm(`Eliminar automotor ${dominio}?`);
     if (!confirmed) return;
-    this.automotores = this.automotores.filter((a) => a.dominio !== dominio);
+    if (this.dominiosBeingDeleted.has(dominio)) return;
+    this.dominiosBeingDeleted.add(dominio);
+    this.error = null;
+    this.api.deleteAutomotor(dominio).subscribe({
+      next: () => {
+        this.fetchAutomotores();
+        this.dominiosBeingDeleted.delete(dominio);
+      },
+      error: (err) => {
+        const message = err?.error?.message || err?.message || 'Error eliminando automotor';
+        this.error = Array.isArray(message) ? message.join(', ') : String(message);
+        this.dominiosBeingDeleted.delete(dominio);
+      },
+    });
   }
 
   trackByDominio(index: number, item: AutomotorListItem): string {
