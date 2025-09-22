@@ -13,6 +13,12 @@ services:
     networks:
       - mindfactory_challenge_network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -h localhost -p $POSTGRES_PORT"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
   backend:
     build:
@@ -27,7 +33,8 @@ services:
       - mindfactory_challenge_network
     restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   frontend:
     build:
