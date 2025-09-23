@@ -39,6 +39,10 @@ export const environment = {
 
 Si usás Docker Compose, alinealo con `BACKEND_PORT` definido en `apps/backend/.env` (por defecto 3000). Si cambiaste el puerto, actualiza aquí el valor (p. ej. `http://localhost:5000/api`).
 
+### 1.2) Configurar variables de entorno para Docker Compose
+
+En la raíz, copia `.env.example` a `.env` y completa sus valores. Asegúrate de que coincidan con `apps/backend/.env` y con `apps/frontend/src/environments/environment.ts` (puertos/host/db), ya que Docker Compose los usa.
+
 ### 2) (Opcional) Generar migraciones cuando cambies el modelo
 
 Si modificas entidades/esquema, genera una nueva migración **referenciando el DataSource** que está en `apps/backend/src/database/datasources/`:
